@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
 	Transform playerTransf;
 	Rigidbody2D playerBody;
+
 	[SerializeField]
 	float vel;
 
@@ -17,7 +18,6 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
@@ -28,6 +28,5 @@ public class PlayerController : MonoBehaviour {
 			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(angle+270, Vector3.forward);
 		}
-
 	}
 }

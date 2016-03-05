@@ -8,20 +8,31 @@ public class EventController : MonoBehaviour {
 
 	[SerializeField]
 	GameObject ring;
-	
+
+	[SerializeField]
+	GameObject loseUI;
+
+	[SerializeField]
+	GameObject teste;
+
+	void Start() {
+		Time.timeScale = 1;
+	}
+
 	// Update is called once per frame
 	void Update () {
-		Vector2 playerPos = new Vector2 (player.transform.position.x, player.transform.position.y);
-		Vector2 ringPos = new Vector2 (ring.transform.position.x, ring.transform.position.y);
+		if (Input.GetKey (KeyCode.Space))
+			Instantiate (teste);
+	}
 
-		float distance = Vector2.Distance (playerPos, ringPos);
-		//float buffer = ring.transform.localScale.x / 2 + player.transform.localScale.x;
-		float buffer = ring.GetComponent<Renderer>().bounds.size.x/2 + player.GetComponent<Renderer>().bounds.size.x / 2;
-
-		if (distance > buffer) {
+	void OnTriggerExit2D(Collider2D other)
+	{
+		if (other.gameObject.CompareTag ("Player")) {
 			Debug.Log ("DEAD");
+			Time.timeScale = 0;
+			loseUI.SetActive (true);
 		} else {
-			Debug.Log ("NOT DEAD");
+			Destroy (other.gameObject);
 		}
 	}
 }
