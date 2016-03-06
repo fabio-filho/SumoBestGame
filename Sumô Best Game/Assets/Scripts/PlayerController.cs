@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CnControls;
 
 public class PlayerController : MonoBehaviour {
 
-	Transform playerTransf;
 	Rigidbody2D playerBody;
 
 	[SerializeField]
@@ -11,15 +11,14 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerTransf = GetComponent<Transform> ();
 		playerBody = GetComponent<Rigidbody2D> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
-		float x = Input.GetAxis("Horizontal");
-		float y = Input.GetAxis ("Vertical");
+		float x = CnInputManager.GetAxis("Horizontal");
+		float y = CnInputManager.GetAxis ("Vertical");
 
 		playerBody.velocity = new Vector2 (x, y) * vel;
 
