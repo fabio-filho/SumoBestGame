@@ -47,11 +47,16 @@ public class SpawnerController : MonoBehaviour {
 	}
 
 	void spawnEnemies() {
-		for (int i = 0; i < easySpawnSeq[level]; i++)
+		int seq;
+		seq = level;
+		if (level > 5) {
+			seq = 5;
+		}
+		for (int i = 0; i < easySpawnSeq[seq]; i++)
 			GameObject.Instantiate (enemyEasy);
-		for (int i = 0; i < mediumSpawnSeq[level]; i++)
+		for (int i = 0; i < mediumSpawnSeq[seq]; i++)
 			GameObject.Instantiate (enemyMedium);
-		for (int i = 0; i < hardSpawnSeq[level]; i++)
+		for (int i = 0; i < hardSpawnSeq[seq]; i++)
 			GameObject.Instantiate (enemyHard);
 		level++;
 	}

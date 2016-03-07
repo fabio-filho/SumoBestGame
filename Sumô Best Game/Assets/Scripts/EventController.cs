@@ -13,26 +13,24 @@ public class EventController : MonoBehaviour {
 	GameObject loseUI;
 
 	[SerializeField]
-	GameObject teste;
+	ScoreManager scoreManager;
+
+	[SerializeField]
+	UnityAds unityAds;
 
 	void Start() {
 		Time.timeScale = 1;
 	}
 
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKey (KeyCode.Space))
-			Instantiate (teste);
-	}
-
 	void OnTriggerExit2D(Collider2D other)
 	{
 		if (other.gameObject.CompareTag ("Player")) {
-			Debug.Log ("DEAD");
 			Time.timeScale = 0;
 			loseUI.SetActive (true);
+			unityAds.ShowAd ();
 		} else {
 			Destroy (other.gameObject);
+			scoreManager.addScore ((int)other.attachedRigidbody.mass);
 		}
 	}
 }
