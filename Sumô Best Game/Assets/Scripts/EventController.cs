@@ -33,4 +33,7 @@ public class EventController : MonoBehaviour {
 			scoreManager.addScore ((int)other.attachedRigidbody.mass);
 		}
 	}
+
+
+
 }

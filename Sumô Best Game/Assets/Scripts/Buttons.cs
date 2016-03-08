@@ -22,4 +22,6 @@ public class Buttons : MonoBehaviour {
 		UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
 		scoreManager.resetScore ();
 	}
+
+
 }

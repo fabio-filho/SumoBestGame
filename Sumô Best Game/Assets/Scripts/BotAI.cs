@@ -10,16 +10,27 @@ public class BotAI : MonoBehaviour {
 	Vector2 botPos;
 	Vector2 distanceVector;
 
+
 	[SerializeField]
-	float vel;
+	public static float vel;
+
+	float defaultVelocity = 1.5f;
 
 	void Start() {
 		botBody = gameObject.GetComponent<Rigidbody2D> ();
 		playerBody = GameObject.Find ("Player").GetComponent<Rigidbody2D>();
+
+		vel = defaultVelocity;
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+		Debug.Log (vel);
+
+		if (vel < defaultVelocity)
+			vel+=0.01f;
+		
 		playerPos = playerBody.position;
 		botPos = botBody.position;
 
