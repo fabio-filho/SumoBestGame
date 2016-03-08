@@ -7,9 +7,12 @@ public class PlayerController : MonoBehaviour {
 
 
 	[SerializeField]
-	float pushForce = 500000;
+	float pushForce = 40;
 
 	Rigidbody2D playerBody;
+
+	[SerializeField]
+	SimpleButton buttonEnemyPush;
 
 	[SerializeField]
 	float vel;
@@ -58,10 +61,14 @@ public class PlayerController : MonoBehaviour {
 					
 					Vector2 buffer;
 					buffer = (other.attachedRigidbody.position - playerBody.position).normalized;
-					other.attachedRigidbody.AddForce (buffer * pushForce * Time.deltaTime);
+
 					BotAI.vel = 0f;
+					other.attachedRigidbody.velocity = Vector2.zero;
+					other.attachedRigidbody.AddForce ((buffer * pushForce) / Time.fixedDeltaTime, ForceMode2D.Force);
+
 					canPush = false;
 					timeLeftToEnablePushButton = timeLeftToEnablePushButtonDefault;
+					buttonEnemyPush.gameObject.GetComponent<Image>().color = new Color32(107, 107, 107, 125);
 				}
 			}
 		}
@@ -73,8 +80,11 @@ public class PlayerController : MonoBehaviour {
 
 		timeLeftToEnablePushButton -= Time.deltaTime;
 
-		if (timeLeftToEnablePushButton < 0)
+		if (timeLeftToEnablePushButton < 0) {			
+			
+			buttonEnemyPush.gameObject.GetComponent<Image>().color = new Color32(255, 0, 0, 255);
 			canPush = true;
+		}
 		
 	}
 		

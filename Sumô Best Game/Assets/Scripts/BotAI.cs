@@ -28,9 +28,6 @@ public class BotAI : MonoBehaviour {
 
 		Debug.Log (vel);
 
-		if (vel < defaultVelocity)
-			vel+=0.01f;
-		
 		playerPos = playerBody.position;
 		botPos = botBody.position;
 
@@ -38,7 +35,12 @@ public class BotAI : MonoBehaviour {
 
 		Vector2 moveDirection = distanceVector.normalized;
 
-		botBody.velocity = moveDirection * vel;
+
+		if (vel < defaultVelocity)
+			vel += 0.04f;		
+		else 
+			botBody.velocity = moveDirection * vel;
+					
 
 		if (moveDirection != Vector2.zero) {
 			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
