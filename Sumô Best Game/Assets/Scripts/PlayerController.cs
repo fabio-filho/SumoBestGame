@@ -9,13 +9,13 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	float pushForce = 40;
 
-	Rigidbody2D playerBody;
-
 	[SerializeField]
 	SimpleButton buttonEnemyPush;
 
 	[SerializeField]
 	float vel;
+
+	Rigidbody2D playerBody;
 
 	bool canPush = true; 
 
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (canPush) {
 			if (other.gameObject.tag == "Enemy") {
-				if (Input.GetButtonDown ("EnemyPush")) {
+				if (CnInputManager.GetButtonDown ("EnemyPush")) {
 					
 					Vector2 buffer;
 					buffer = (other.attachedRigidbody.position - playerBody.position).normalized;
@@ -80,12 +80,13 @@ public class PlayerController : MonoBehaviour {
 
 		timeLeftToEnablePushButton -= Time.deltaTime;
 
-		if (timeLeftToEnablePushButton < 0) {			
-			
+		if (timeLeftToEnablePushButton < 0) {				
 			buttonEnemyPush.gameObject.GetComponent<Image>().color = new Color32(255, 0, 0, 255);
 			canPush = true;
 		}
 		
 	}
 		
+
+
 }

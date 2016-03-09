@@ -22,6 +22,15 @@ public class SpawnerController : MonoBehaviour {
 	[SerializeField]
 	Text counterText;
 
+	[SerializeField]
+	GameObject loseUI;
+
+	[SerializeField]
+	ScoreManager scoreManager;
+
+	[SerializeField]
+	Rigidbody2D playerBody;
+
 	int[] easySpawnSeq;
 	int[] mediumSpawnSeq;
 	int[] hardSpawnSeq;
@@ -42,7 +51,8 @@ public class SpawnerController : MonoBehaviour {
 
 	void Update() {
 		if (GameObject.FindWithTag ("Enemy") == null) {
-			countdownAndSpawn ();
+			if (!loseUI.activeInHierarchy)
+				countdownAndSpawn ();			
 		}
 	}
 
@@ -57,20 +67,45 @@ public class SpawnerController : MonoBehaviour {
 		for (int i = 0; i < mediumSpawnSeq[seq]; i++)
 			GameObject.Instantiate (enemyMedium);
 		for (int i = 0; i < hardSpawnSeq[seq]; i++)
-			GameObject.Instantiate (enemyHard);
+			GameObject.Instantiate (enemyHard);		
+		
 		level++;
+
+		if(level != 1)
+			scoreManager.updateCoins ();
 	}
 
-	void countdownAndSpawn() {
+	public void countdownAndSpawn() {
+		
 		timerUI.SetActive (true);
 		timeLeft -= Time.deltaTime;
 		counterText.text = ((int)timeLeft).ToString ();
 		roundText.text = "Rodada " + (level + 1).ToString ();
+
 		if (timeLeft < 0) {
 			spawnEnemies ();
 			timerUI.SetActive (false);
 			timeLeft = 4;
 		}
+
+	}
+
+
+	public void continueGame(){
+
+		level--;
+		timeLeft = 4;
+		loseUI.SetActive (false);
+		scoreManager.updateCoins (-ScoreManager.COINS_TO_REVIVE);
+		Time.timeScale = 1;
+		countdownAndSpawn ();
+	}
+
+
+	public void killEnemies(){
+
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Enemy"))
+			Destroy (gameObject);
 	}
 
 }

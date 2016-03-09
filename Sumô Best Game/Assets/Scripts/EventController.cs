@@ -16,24 +16,25 @@ public class EventController : MonoBehaviour {
 	ScoreManager scoreManager;
 
 	[SerializeField]
-	UnityAds unityAds;
+	GameObject timeUI;
 
 	void Start() {
 		Time.timeScale = 1;
 	}
 
 	void OnTriggerExit2D(Collider2D other)
-	{
+	{			
 		if (other.gameObject.CompareTag ("Player")) {
 			Time.timeScale = 0;
 			loseUI.SetActive (true);
-			unityAds.ShowAd ();
+			timeUI.SetActive (false);
+			player.GetComponent<Rigidbody2D>().position = Vector2.zero;
+
 		} else {
 			Destroy (other.gameObject);
 			scoreManager.addScore ((int)other.attachedRigidbody.mass);
 		}
 	}
-
 
 
 }
