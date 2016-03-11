@@ -6,15 +6,11 @@ public class BotAI : MonoBehaviour {
 	Rigidbody2D playerBody;
 	Rigidbody2D botBody;
 
-	Vector2 playerPos;
-	Vector2 botPos;
-	Vector2 distanceVector;
-
 
 	[SerializeField]
 	public static float vel;
 
-	float defaultVelocity = 1.5f;
+	float defaultVelocity = 1.5f, velocityIncreaseRate = 0.04f;
 
 	void Start() {
 		botBody = gameObject.GetComponent<Rigidbody2D> ();
@@ -23,30 +19,69 @@ public class BotAI : MonoBehaviour {
 		vel = defaultVelocity;
 	}
 
-	// Update is called once per frame
-	void Update () {
 
-		Debug.Log (vel);
+	void Update2 () {
+		
+		Rigidbody2D mNearEnemy = null;
+		float mDistance = 0;
 
-		playerPos = playerBody.position;
-		botPos = botBody.position;
+		foreach (GameObject mEnemyTemp in GameObject.FindGameObjectsWithTag("Enemy")){
+			
+			Rigidbody2D mEnemy = mEnemyTemp.GetComponent<Rigidbody2D> ();
 
-		distanceVector = playerPos - botPos;
+			if (mNearEnemy == null)
+				mNearEnemy = mEnemy;
+   
+			float mTempDistance = Vector2.Distance (playerBody.position, mEnemy.position); 
 
-		Vector2 moveDirection = distanceVector.normalized;
+			if (mDistance == 0)
+				mDistance = mTempDistance;
 
+			if (mTempDistance <= mDistance) {
+				mNearEnemy = mEnemy; 
+				mDistance = mTempDistance;
+			}
+			
+			Debug.Log (mTempDistance + "  -  "+ (mTempDistance <= mDistance));
 
-		if (vel < defaultVelocity)
-			vel += 0.04f;		
-		else 
-			botBody.velocity = moveDirection * vel;
-					
-
-		if (moveDirection != Vector2.zero) {
-			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.AngleAxis(angle+270, Vector3.forward);
-		}
-
+			if (botBody == mNearEnemy) {
+				followObject (playerBody, botBody);
+				//Debug.Log ("followPlayer");
+			} else {
+				followObject (mNearEnemy, botBody);
+				Debug.Log ("followEnemy");
+			}
+									
+		    }
 
 	}
+
+
+	void Update () {
+
+		followObject (playerBody, botBody);
+	}
+
+
+	void followObject( Rigidbody2D mTarget, Rigidbody2D mBody ){
+
+		Vector2 mBodyPosition   = mBody.position;
+		Vector2 mTargetPosition = mTarget.position;
+
+		Vector2 mDistance = mTargetPosition - mBodyPosition;
+
+		Vector2 mMoveDirection = mDistance.normalized;
+
+		if (vel < defaultVelocity)
+			vel += velocityIncreaseRate;		
+		else 
+			mBody.velocity = mMoveDirection * vel;
+		
+		if (mMoveDirection != Vector2.zero) {
+			float angle = Mathf.Atan2(mMoveDirection.y, mMoveDirection.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.AngleAxis(angle+270, Vector3.forward);
+		}
+	}
+
+
 }
